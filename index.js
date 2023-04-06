@@ -30,7 +30,11 @@ const openai = new OpenAIApi(configuration);
 
 //get request
 
-app.get("/",async(req,res)=>{
+app.get("/",(req,res)=>{
+    res.send("Hello recipe app...")
+})
+
+app.get("/api/v1/recommendation",async(req,res)=>{
     res.status(500).json({result})
 })
 
