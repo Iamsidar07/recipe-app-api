@@ -42,34 +42,15 @@ app.get("/api/v1/recommendation",async(req,res)=>{
 app.post("/api/v1/findRecipe", async (req, res) => {
     //Getting recomendation recipe
     const ingredients = req.body.ingredients;
+
     
     const completion = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages:[
             { role:"system",content:"You are a master chef you know to make every recipe."},
             { role: "user", content: `I have following ingridients ${ [...ingredients]
-    }.From this suggest me a recipe so that I can make food.The response should be a object give below and remember image should be from pixel website.Make sure that "recipeImageUrl" is emoji icon of recipe and "ingredientImageUrl" is emoji icon of individual ingredient this is important . your response should be a object. id should be unique every time and type of mongodb id.
-        {
-            "_id":"",
-            "title": "",
-            "description": "",
-            "recipeImageUrl": "",
-            "ingredients": [
-                {
-                    "name": "",
-                    "ingredientImageUrl": "",
-                    "quantity:" in gm",
-                },
-            ],
-            "direction": [
-                "step1",
-                "step2",
-            ],
-            "serving": "4",
-            "time": "30 minutes",
-            "difficulty": "easy",
-            "category": "Pasta",
-        } 
+    }.From this suggest me a recipe so that I can make food.The response should be a object give below.Make sure that "recipeImageUrl" is image url of the recipe and "ingredientImageUrl" is emoji icon of ingredient. your response should be a object. id should be unique for every time you answered.All image url should be from pixel https://www.pexels.com/ . Images should not be 404
+{"_id":"","title": "","description": "","recipeImageUrl": "","ingredients": [{"name": "","ingredientImageUrl": "","quantity:" in gm",},],"direction": ["step1","step2"],"serving": "4","time": "30 minutes","difficulty": "easy","category": "Pasta",} 
         make sure all the fields are presents and all weights are in gram.Direction should be more descriptive explain all direction like I am 5. 
         ` }
         ],
@@ -79,7 +60,7 @@ app.post("/api/v1/findRecipe", async (req, res) => {
     const result=completion.data.choices[0].message;
     console.log(result)
 
-    res.status(500).json({ "result":result.content });
+    res.status(500).json({ "result": JSON.parse(result.content) });
 });
 
 
