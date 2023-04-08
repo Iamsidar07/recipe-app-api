@@ -1,24 +1,43 @@
 export const result = [
     {
-    "id": 1,
-    "title": "Pasta with Tomato Sauce",
-    "description": "This classic pasta recipe feature tomato sauce made from scratch, plenty of herbs, and melted cheese.",
-        "image": "https://images.pexels.com/photos/14737/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=600",
-    "ingredients": [{ "name": "Pasta", "quantity": "1 gm", },
-    { "name": "Tomato", "quantity": "2 gm", },
-    { "name": "Onion", "quantity": "1 gm", },
-    { "name": "Garlic", "quantity": "2 gm", },
-    { "name": "Basil", "quantity": "1 gm", },
-    { "name": "Oregano", "quantity": "1 gm", },
-    { "name": "Salt", "quantity": "1 gm", },
-    { "name": "Pepper", "quantity": "1 gm", },
-    { "name": "Olive Oil", "quantity": "2 gm", },
-    { "name": "Parmesan Cheese", "quantity": "2 gm", }],
-    "direction": ["Bring a large pot of salted water to a boil.Add the pasta and cook according to package instructions.", "Meanwhile, heat the olive oil in a large skillet over medium heat.Add the onion and garlic and cook until softened, about 5 minutes.", "Add the tomatoes, basil, oregano, salt, and pepper.Simmer for 10 minutes.", "Drain the pasta and add it to the skillet with the sauce.Stir in the Parmesan cheese.", "Serve the pasta with extra Parmesan cheese, if desired."],
-    "serving": "4",
-    "time": "30 minutes",
-    "difficulty": "easy",
-    "category": "Pasta"
-},
-   
+        "_id": "1234567",
+        "title": "Tomato & Egg Sandwich",
+        "description": "A quick and easy breakfast or lunch recipe that is healthy and delicious",
+        "recipeImageUrl": "https://source.unsplash.com/random/?Tomato%20&%20Egg%20Sandwich",
+        "ingredients": [
+            {
+                "name": "Tomato",
+                "ingredientImageUrl": "https://source.unsplash.com/random/?Tomato",
+                "quantity": "150 gm"
+            },
+            {
+                "name": "Bread",
+                "ingredientImageUrl": "https://source.unsplash.com/random/?Bread",
+                "quantity": "2 slices"
+            },
+            {
+                "name": "Egg",
+                "ingredientImageUrl": "https://source.unsplash.com/random/?Egg",
+                "quantity": "2"
+            },
+            {
+                "name": "Cucumber",
+                "ingredientImageUrl": "https://source.unsplash.com/random/?Cucumber",
+                "quantity": "50 gm"
+            }
+        ],
+        "direction": [
+            "Toast the bread to your liking and set aside.",
+            "In a non-stick frying pan, add chopped tomatoes and cook on medium heat for 3-4 minutes or until they start to soften.",
+            "In another frying pan, crack two eggs and cook until the yolks are set but still runny.",
+            "On the toasted bread, place the cooked tomatoes and sliced cucumbers.",
+            "Top with the fried eggs and season with salt and pepper.",
+            "Enjoy your healthy and delicious Tomato & Egg Sandwich!"
+        ],
+        "serving": "2",
+        "time": "15 minutes",
+        "difficulty": "Easy",
+        "category": "Breakfast/Lunch"
+    }
+
 ]

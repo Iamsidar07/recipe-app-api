@@ -17,7 +17,7 @@ app.use(cors());
 //creating openai configuration
 
 
-console.log(process.env.ORGANIZATION_ID, process.env.OPENAI_API_KEY)
+// console.log(process.env.ORGANIZATION_ID, process.env.OPENAI_API_KEY)
 
 const configuration = new Configuration({
     organization: process.env.ORGANIZATION_ID,
@@ -42,6 +42,7 @@ app.get("/api/v1/recommendation",async(req,res)=>{
 app.post("/api/v1/findRecipe", async (req, res) => {
     //Getting recomendation recipe
     const ingredients = req.body.ingredients;
+    // const ingredients=["tomato","bread","egg","cuccumber"];
 
     
     const completion = await openai.createChatCompletion({
@@ -49,7 +50,7 @@ app.post("/api/v1/findRecipe", async (req, res) => {
         messages:[
             { role:"system",content:"You are a master chef you know to make every recipe."},
             { role: "user", content: `I have following ingridients ${ [...ingredients]
-    }.From this suggest me a recipe so that I can make food.The response should be a object give below.Make sure that "recipeImageUrl" is image url of the recipe and "ingredientImageUrl" is emoji icon of ingredient. your response should be a object. id should be unique for every time you answered.All image url should be from pixel https://www.pexels.com/ . Images should not be 404
+    }.From this suggest me a recipe so that I can make food.The response should be a object give below.Make sure that "recipeImageUrl" is image url of the recipe and "ingredientImageUrl" is image of ingredient. your response should be a object. id should be unique for every time you answered.Use https://source.unsplash.com/random/?recipeTitle to get all image url. Do not forget to replace the recipeTitle with the recipe title you get. Make sure to explain all of the steps of direction.
 {"_id":"","title": "","description": "","recipeImageUrl": "","ingredients": [{"name": "","ingredientImageUrl": "","quantity:" in gm",},],"direction": ["step1","step2"],"serving": "4","time": "30 minutes","difficulty": "easy","category": "Pasta",} 
         make sure all the fields are presents and all weights are in gram.Direction should be more descriptive explain all direction like I am 5. 
         ` }
@@ -58,7 +59,7 @@ app.post("/api/v1/findRecipe", async (req, res) => {
     });
 
     const result=completion.data.choices[0].message;
-    console.log(result)
+    // console.log(result)
 
     res.status(500).json({ "result": JSON.parse(result.content) });
 });
