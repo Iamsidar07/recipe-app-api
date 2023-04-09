@@ -12,7 +12,7 @@ const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-const openai=new OpenAIApi(configuration);
+const openai = new OpenAIApi(configuration);
 
 router.route("/").post(async (req, res) => {
     //post request
@@ -35,20 +35,20 @@ router.route("/").post(async (req, res) => {
 
         });
 
-        const result = JSON.parse(completion.data.choices[0].message.content);
+        const result = completion.data.choices[0].message.content;
 
         //create Recipe in mongodb
-        // console.log(result)
-        const newRecipe = await Recipe.create(result);
+        console.log(result)
+        const newRecipe = await Recipe.create(JSON.parse(result));
         console.log({ newRecipe });
         // console.log(result)
-        res.status(200).json({ success: true, result });
+        res.status(200).json({ success: true, result: newRecipe });
     } catch (error) {
-       console.log(error);
-       res.status(500).json({
-        success:false,
-        message:error
-       })
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: error
+        })
     }
 
 
