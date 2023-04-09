@@ -1,12 +1,15 @@
 import mongoose from "mongoose";
-import IngredientSchema from "./Ingredient.js";
 const Recipe = new mongoose.Schema(
     {
         title: { type: String, required: true },
         description: { type: String, required: true },
         recipeImageUrl: { type: String, required: true },
         ingredients: [
-            { type: String, required: true }
+            {
+                name: { type: String, required: true },
+                ingredientImageUrl: { type: String, required: true },
+                quantity: { type: String, required: true }
+            }
         ],
         direction: [
             String

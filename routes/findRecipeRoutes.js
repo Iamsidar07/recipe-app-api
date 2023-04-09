@@ -19,6 +19,7 @@ router.route("/").post(async (req, res) => {
     //Finding recipe from Ingredients
     const ingredients = req.body.ingredients;
     // const ingredients=["tomato","bread","egg","cuccumber"];
+    // console.log(ingredients,"ingredients");
     try {
         const completion = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
@@ -26,8 +27,8 @@ router.route("/").post(async (req, res) => {
                 { role: "system", content: "You are a master chef you know to make every recipe." },
                 {
                     role: "user", content: `I have following ingridients ${[...ingredients]
-                        }.From this suggest me a recipe so that I can make food.The response should be a object give below.Make sure that "recipeImageUrl" is image url of the recipe and "ingredientImageUrl" is image of ingredient. your response should be a object. id should be unique for every time you answered.Use https://source.unsplash.com/random/?recipeTitle to get all image url. Do not forget to replace the recipeTitle with the recipe title you get. Make sure to explain all of the steps of direction.
-{"_id":"","title": "","description": "","recipeImageUrl": "","ingredients": [{"name": "","ingredientImageUrl": "","quantity:" in gm",},],"direction": ["step1","step2"],"serving": "4","time": "30 minutes","difficulty": "easy","category": "Pasta",} 
+                        }.From this suggest me a recipe so that I can make food.The response should be a object give below.Make sure that "recipeImageUrl" is image url of the recipe and "ingredientImageUrl" is image of ingredient. your response should be a object.Use https://source.unsplash.com/random/?recipeTitle to get all image url. Do not forget to replace the recipeTitle with the recipe title you get. Make sure to explain all of the steps of direction.Make sure to direct return only object do not any extra line not even single line.Do not add any extra word after or before object.
+{"title": "","description": "","recipeImageUrl": "","ingredients": [{"name": "","ingredientImageUrl": "","quantity:" in gm",},],"direction": ["step1","step2"],"serving": "4","time": "30 minutes","difficulty": "easy","category": "Pasta",} 
         make sure all the fields are presents and all weights are in gram.Direction should be more descriptive explain all direction like I am 5. 
         ` }
             ],
@@ -37,6 +38,7 @@ router.route("/").post(async (req, res) => {
         const result = JSON.parse(completion.data.choices[0].message.content);
 
         //create Recipe in mongodb
+        // console.log(result)
         const newRecipe = await Recipe.create(result);
         console.log({ newRecipe });
         // console.log(result)
