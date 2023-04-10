@@ -15,34 +15,51 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 router.route("/").post(async (req, res) => {
-    //post request
-    //Finding recipe from Ingredients
+
     const ingredients = req.body.ingredients;
-    // const ingredients=["tomato","bread","egg","cuccumber"];
-    // console.log(ingredients,"ingredients");
+
     try {
-        const completion = await openai.createChatCompletion({
-            model: "gpt-3.5-turbo",
-            messages: [
-                { role: "system", content: "You are a master chef you know to make every recipe." },
-                {
-                    role: "user", content: `I have following ingridients ${[...ingredients]
-                        }.From this suggest me a recipe so that I can make food.The response should be a object give below.Make sure that "recipeImageUrl" is image url of the recipe and "ingredientImageUrl" is image of ingredient. your response should be a object.Use https://source.unsplash.com/random/?recipeTitle to get all image url. Do not forget to replace the recipeTitle with the recipe title you get. Make sure to explain all of the steps of direction.Make sure to direct return only object do not any extra line not even single line.Do not add any extra word after or before object.id should be contains of alphabates and numbers and id should be unique. Please make sure to check all images are exist. Do not send 404 images.
-{"id":"","title": "","description": "","recipeImageUrl": "","ingredients": [{"name": "","ingredientImageUrl": "","quantity:" in gm",},],"direction": ["step1","step2"],"serving": "4","time": "30 minutes","difficulty": "easy","category": "Pasta",} 
+        const getRecipeDetail = async () => {
+            const completion = await openai.createChatCompletion({
+                model: "gpt-3.5-turbo",
+                messages: [
+                    { role: "system", content: "You are a master chef you know to make every recipe." },
+                    {
+                        role: "user", content: `I have following ingridients ${[...ingredients]
+                            }.From this suggest me a recipe so that I can make food.The response should be a object give below."ingredientEmoji" is emoji icon of ingredient.use unsplash to get all images.Image that you are giving they are not exist so Send only images that are exist. Make sure to explain all of the steps of direction.Make sure to direct return only object do not any extra line not even single line.Do not add any extra word after or before object.id should be contains of alphabates and numbers and id should be unique. Please make sure to check all images are exist. Do not send 404 images.
+{"title": "","description": "","recipeImageUrl":"","ingredients": [{"name": "","ingredientEmoji": "","quantity:" in gm",},],"direction": ["step1","step2"],"serving": "4","time": "30 minutes","difficulty": "easy","category": "Pasta",} 
         make sure all the fields are presents and all weights are in gram.Direction should be more descriptive explain all direction like I am 5. 
         ` }
-            ],
+                ],
 
-        });
+            });
+            return completion.data.choices[0].message.content;
+        }
 
-        const result = completion.data.choices[0].message.content;
+        const getRecipeImageUrl = async (recipeDetail) => {
+            const imageCompletion = await openai.createImage({
+                prompt: recipeDetail.title,
+                n: 1,
+                size: "1024x1024",
+                response_format: 'url',
+            });
+            return imageCompletion.data.data[0].url;
+        }
+        const uploadToMongoDB = async (recipeDetail, recipeImageUrl) => {
+            recipeDetail["recipeImageUrl"] = recipeImageUrl;
+            const newRecipe = await Recipe.create(recipeDetail);
+            return newRecipe;
+        }
 
-        //create Recipe in mongodb
-        console.log(result)
-        const newRecipe = await Recipe.create(JSON.parse(result));
-        console.log({ newRecipe });
-        // console.log(result)
-        res.status(200).json({ success: true, result: newRecipe });
+        const recipeDetailRes = await getRecipeDetail();
+        const recipeDetail = JSON.parse(recipeDetailRes);
+
+        const recipeImageUrl = await getRecipeImageUrl(recipeDetail);
+
+        const newRecipeDetail = await uploadToMongoDB(recipeDetail, recipeImageUrl);
+
+
+        res.status(200).json({ success: true, result: newRecipeDetail });
     } catch (error) {
         console.log(error);
         res.status(500).json({
