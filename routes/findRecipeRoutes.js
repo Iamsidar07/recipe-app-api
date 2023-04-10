@@ -2,10 +2,18 @@ import express from "express";
 import * as dotenv from "dotenv";
 import Recipe from "../mongodb/models/Recipe.js";
 import { Configuration, OpenAIApi } from 'openai';
+import { v2 as cloudinary } from "cloudinary"
 
 dotenv.config();
 
 const router = express.Router();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_SECRETE_KEY
+
+})
 
 const configuration = new Configuration({
     organization: process.env.ORGANIZATION_ID,
@@ -38,15 +46,15 @@ router.route("/").post(async (req, res) => {
 
         const getRecipeImageUrl = async (recipeDetail) => {
             const imageCompletion = await openai.createImage({
-                prompt: `${recipeDetail.title} ${recipeDetail.description} art style should be Art Nouveau. Add disney touch`,
+                prompt: `${recipeDetail.title} ${recipeDetail.description}, Cinematic, Avatar,`,
                 n: 1,
                 size: "1024x1024",
                 response_format: 'url',
             });
             return imageCompletion.data.data[0].url;
         }
-        const uploadToMongoDB = async (recipeDetail, recipeImageUrl) => {
-            recipeDetail["recipeImageUrl"] = recipeImageUrl;
+        const uploadToMongoDB = async (recipeDetail, recipeImageUrlFromCloudinary) => {
+            recipeDetail["recipeImageUrl"] = recipeImageUrlFromCloudinary;
             const newRecipe = await Recipe.create(recipeDetail);
             return newRecipe;
         }
@@ -54,9 +62,13 @@ router.route("/").post(async (req, res) => {
         const recipeDetailRes = await getRecipeDetail();
         const recipeDetail = JSON.parse(recipeDetailRes);
 
-        const recipeImageUrl = await getRecipeImageUrl(recipeDetail);
+        const recipeImageUrlFromDalle = await getRecipeImageUrl(recipeDetail);
 
-        const newRecipeDetail = await uploadToMongoDB(recipeDetail, recipeImageUrl);
+        const recipeImageUrlFromCloudinaryResponse=await cloudinary.uploader.upload(recipeImageUrlFromDalle);
+        const recipeImageUrlFromCloudinary=recipeImageUrlFromCloudinaryResponse.url;
+        
+
+        const newRecipeDetail = await uploadToMongoDB(recipeDetail, recipeImageUrlFromCloudinary);
 
 
         res.status(200).json({ success: true, result: newRecipeDetail });
