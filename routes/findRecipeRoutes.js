@@ -38,7 +38,7 @@ router.route("/").post(async (req, res) => {
 
         const getRecipeImageUrl = async (recipeDetail) => {
             const imageCompletion = await openai.createImage({
-                prompt: `${recipeDetail.title} ${recipeDetail.description} art style should be Art Nouveau. Add disney touch`,
+                prompt: `${recipeDetail.title} ${recipeDetail.description}, Cinematic, Art Nouveau, Avatar, Disney anime style.`,
                 n: 1,
                 size: "1024x1024",
                 response_format: 'url',
