@@ -46,7 +46,7 @@ router.route("/").post(async (req, res) => {
 
         const getRecipeImageUrl = async (recipeDetail) => {
             const imageCompletion = await openai.createImage({
-                prompt: `${recipeDetail.title},Cinematic,Food phtotography.`,
+                prompt: `${recipeDetail.title},Cinematic, realistic, Food phtotography.`,
                 n: 1,
                 size: "1024x1024",
                 response_format: 'url',
