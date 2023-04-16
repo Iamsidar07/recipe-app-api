@@ -54,7 +54,7 @@ router.route("/").post(async (req, res) => {
                         role: "user", content: `I have following ingridients ${[...ingredients]
                             }.From this suggest me a recipe so that I can make food.The response should be a object give below."ingredientEmoji" is emoji icon of ingredient.use unsplash to get all images.Image that you are giving they are not exist so Send only images that are exist. Make sure to explain all of the steps of direction.Make sure to direct return only object do not any extra line not even single line.Do not add any extra word after or before object.id should be contains of alphabates and numbers and id should be unique. Please make sure to check all images are exist. Do not send 404 images.
 {"title": "","description": "","recipeImageUrl":"","ingredients": [{"name": "","ingredientEmoji": "","quantity:" in gm",},],"direction": ["step1","step2"],"serving": "4","time": "30 minutes","difficulty": "easy","category": "Pasta",} 
-        make sure all the fields are presents and all weights are in gram.Direction should be more descriptive explain all direction like I am 5. 
+        make sure all the fields are presents and all weights are in gram.Direction should be more descriptive explain all direction like I am 5. Direction should be in Hinglish language.
         ` }
                 ],
 
