@@ -22,6 +22,24 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
+const getOpenAiPrompt = async (userInputPrompt) => {
+    const completion = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [
+            {
+                role: "system", content: "I want you to act as a highly experienced photographer. You will use rich and highly artistic language when describing your photo prompts — the prompt must be one sentence long"
+            },
+            {
+                role: "user", content: userInputPrompt
+            }
+        ]
+    })
+
+    return completion.data.choices[0].message.content;
+}
+
+
+
 router.route("/").post(async (req, res) => {
 
     const ingredients = req.body.ingredients;
@@ -46,7 +64,7 @@ router.route("/").post(async (req, res) => {
 
         const getRecipeImageUrl = async (recipeDetail) => {
             const imageCompletion = await openai.createImage({
-                prompt: `${recipeDetail.title} ${recipeDetail.description},Cinematic, Avatar, Food phtotography.`,
+                prompt: await getOpenAiPrompt(`${recipeDetail.title} ${recipeDetail.description}`) ,
                 n: 1,
                 size: "1024x1024",
                 response_format: 'url',
