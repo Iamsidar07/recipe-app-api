@@ -14,6 +14,9 @@ const Recipe = new mongoose.Schema(
         direction: [
             String
         ],
+        directions: [
+            String
+        ],
         serving: { type: String, required: true },
         time: { type: String, required: true },
         difficulty: { type: String, required: true },
